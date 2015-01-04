@@ -24,17 +24,17 @@ gulp.task("lint", function() {
         .pipe(lint.failOnError());
 });
 
-gulp.task("test", function() {
+function test() {
 	return gulp.src("./test/**/*.js")
 		.pipe(mocha({
 			ui: "tdd"
 		}));
-});
+}
+
+gulp.task("test", test);
 
 /**
  * The default task runs the lint task then the test task.  This is done serially because otherwise it causes
  * an "Unexpected end of input" SyntaxError when parsing the linter's rules.
  */
-gulp.task("default", ["lint"], function() {
-	gulp.start("test");
-});
+gulp.task("default", ["lint"], test);
