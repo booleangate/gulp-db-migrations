@@ -1,21 +1,64 @@
-var FileTracker = require("../../source/trackers/file"),
-	spec = require("./shared-spec.js"),
-	fs = require("fs");
-	
+var spec = require("./shared-spec.js"),
+    FileTracker = require("rewire")("../../source/trackers/file");
 
-var fixturesDir = __dirname + "/fixtures/",
-	filenameConfig = {
-		writable: {
-			empty: {filename: fixturesDir + "/writable/empty.json"},
-			nonEmpty: {filename: fixturesDir + "/writable/non-empty.json"}
+var config = {
+	writable: {
+		empty: {
+			filename: "/writable/empty.json"
 		},
-		readOnly: {filename: fixturesDir + "/read-only.json"}
-	};
+		nonEmpty: {
+			filename: "/writable/non-empty.json"
+		}
+	},
+	nonWritable: {
+		filename: "/read-only.json"
+	}
+};
 
-// Reset fixture files to expected start states. This makes me sad.  Tried to use mockfs to mock these files,
-// but it caused problems with other require statements.  After 1.5 hours fighting with it, I don't care anymore.
-fs.truncateSync(filenameConfig.writable.empty.filename, 0);
-fs.chmodSync(filenameConfig.readOnly.filename, 0444);
+/*
+ * Override the behavior of fs in the FileTracker module only.  Sinon doesn't seem to be appropriate for stubbing
+ * here because of the way that we have the tests setup.  Ideally we would just do the following, but it's not work
+ * as expected.
 
+	fs.writeFileSync = sinon.stub();
+	
+	fs.readFileSync = sinon.stub()
+		.withArgs(config.writable.empty.filename)
+		.returns("")
+		.withArgs(config.writable.nonEmpty.filename)
+		.returns(JSON.stringify(spec.executedScripts));
+	
+		
+	fs.openSync = sinon.stub()
+		.withArgs(config.nonWritable.filename)
+		.throws();
+ */
+var fs = FileTracker.__get__("fs");
+
+/**
+ * Should throw an exception for non-wrtiable files.  All other files should succeed.
+ */
+fs.openSync = function(filename) {
+	if (filename == config.nonWritable.filename) {
+		throw new Error();
+	}
+};
+
+/**
+ * Should return a JSON string for the non-empty file; otherwise, an empty string.
+ */
+fs.readFileSync = function(filename) {
+	if (filename == config.writable.nonEmpty.filename) {
+		return JSON.stringify(spec.executedScripts);
+	}
+	
+	return "";
+};
+
+/**
+ * Should do nothing.
+ */
+fs.writeFileSync = new Function();
+	
 // Run the shared/generic tests for the file tracker.
-spec(FileTracker, "file", filenameConfig);
+spec.test(FileTracker, "file", config);
