@@ -19,26 +19,6 @@ const DEFAULT_OPTIONS = {
 };
 
 var userOptions = DEFAULT_OPTIONS;
-	
-function checkTrackerFile(trackerFile) {
-	// Ensure that we can write to the tracker file.
-	try {
-		fs.openSync(trackerFile, "a+");
-	} catch (e) {
-		log.error(LOG_PREFIX, "Refusing to do any migrations until we cant write to the tracker file, " + trackerFile);
-		process.exit(1);
-	}
-}
-
-function getExecutedScripts(trackerFile) {
-	try {
-		return JSON.parse(fs.readFileSync(trackerFile));
-	} catch (e) {
-		checkTrackerFile(trackerFile);
-	}
-		
-	return {};
-}
 
 function canExecute(script, executedScripts, isInteractive) {
 	var isExecuted = typeof executedScripts[script] !== "undefined",

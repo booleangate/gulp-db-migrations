@@ -4,7 +4,8 @@
   "description": "DB script executor and manager.",
   "main": "index.js",
   "scripts": {
-    "test": "tap test"
+    "pretest": "gulp lint",
+    "test": "mocha -u tdd --reporter spec test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -17,12 +18,13 @@
   },
   "homepage": "https://github.com/booleangate/node-db-migrations",
   "devDependencies": {
+    "chai": "^1.10.0",
     "gulp": "^3.8.10",
-    "tap": "^0.4.13",
-    "tape": "^3.0.3"
+    "gulp-mocha": "^2.0.0",
+    "mocha": "^2.1.0",
+    "mock-fs": "^2.3.2"
   },
   "dependencies": {
-    "mixin": "^0.2.0",
     "mysql": "^2.5.4",
     "npmlog": "^0.1.1"
   }
