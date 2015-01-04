@@ -1,3 +1,4 @@
+"use strict";
 
 /**
  * Copies the value of `other[propertyName]` to `self` provided that propertyName exists in `other`.  If it does 

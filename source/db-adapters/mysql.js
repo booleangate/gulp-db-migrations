@@ -29,11 +29,11 @@ MysqlAdapter.prototype.startTransaction = function(onComplete) {
 	this.connection.query("START TRANSACTION", queryCallback(onComplete));
 };  
 
-MysqlAdapter.prototype.commit = function() {
+MysqlAdapter.prototype.commit = function(onComplete) {
 	this.connection.query("COMMIT", queryCallback(onComplete));
 };
 
-MysqlAdapter.prototype.rollback = function() {
+MysqlAdapter.prototype.rollback = function(onComplete) {
 	this.connection.query("ROLLBACK", queryCallback(onComplete));
 };
 

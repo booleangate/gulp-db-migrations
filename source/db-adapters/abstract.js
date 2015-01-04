@@ -1,7 +1,6 @@
 "use strict";
 
-var mysql = require("mysql"),
-	util = require("../util");
+var Util = require("../util");
 
 function AbstractAdapter(config) {
 	// See configure method for all class properties
@@ -14,23 +13,23 @@ AbstractAdapter.prototype.configure = function(config) {
 	Util.setProperty(this, config, "password");
 };
 
-AbstractAdapter.prototype.connect = function() {
+AbstractAdapter.prototype.connect = function(/*onComplete*/) {
 	throw Util.getClassName(this) + ".connect() is not yet implemented";
 };
 
-AbstractAdapter.prototype.executeScript = function(scriptName) {
+AbstractAdapter.prototype.executeScript = function(/*scriptContent, onComplete*/) {
 	throw Util.getClassName(this) + ".executeScript() is not yet implemented";
 }; 
 
-AbstractAdapter.prototype.startTransaction = function() {
+AbstractAdapter.prototype.startTransaction = function(/*onComplete*/) {
 	throw Util.getClassName(this) + ".startTransaction() is not yet implemented";
 }; 
 
-AbstractAdapter.prototype.commit = function() {
+AbstractAdapter.prototype.commit = function(/*onComplete*/) {
 	throw Util.getClassName(this) + ".commit() is not yet implemented";
 };
 
-AbstractAdapter.prototype.rollback = function() {
+AbstractAdapter.prototype.rollback = function(/*onComplete*/) {
 	throw Util.getClassName(this) + ".rollback() is not yet implemented";
 };
 

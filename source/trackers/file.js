@@ -1,8 +1,7 @@
 "use strict";
 
 var fs = require("fs"),
-	AbstractTracker = require("./abstract"),
-	properties = require("../properties.js");
+	AbstractTracker = require("./abstract");
 
 function FileTracker(config) {
 	this.configure(config);

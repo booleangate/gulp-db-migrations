@@ -1,3 +1,5 @@
+"use strict";
+
 var assert = require("chai").assert;
 
 var script1 = "script1.sql",
@@ -61,7 +63,7 @@ exports.test = function(Tracker, type, config) {
 			
 			// Reload the tracker to confirm that we always get the correct scripts and that we aren't just 
 			// hitting the cache.
-			tracker = new Tracker(config.writable.nonEmpty),
+			tracker = new Tracker(config.writable.nonEmpty);
 			executedScripts = tracker.getExecutedScripts();
 			testScriptTrackerEntry(executedScripts, script1);
 			testScriptTrackerEntry(executedScripts, script2);

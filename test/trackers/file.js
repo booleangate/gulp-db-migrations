@@ -1,5 +1,9 @@
+"use strict";
+
 var spec = require("./shared-spec.js"),
-    FileTracker = require("rewire")("../../source/trackers/file");
+	rewire = require("rewire");
+	
+var FileTracker = rewire("../../source/trackers/file");
 
 var config = {
 	writable: {
@@ -33,13 +37,15 @@ var config = {
 		.withArgs(config.nonWritable.filename)
 		.throws();
  */
+/*eslint-disable no-underscore-dangle */
 var fs = FileTracker.__get__("fs");
+/*eslint-enable no-underscore-dangle */
 
 /**
  * Should throw an exception for non-wrtiable files.  All other files should succeed.
  */
 fs.openSync = function(filename) {
-	if (filename == config.nonWritable.filename) {
+	if (filename === config.nonWritable.filename) {
 		throw new Error();
 	}
 };
@@ -48,7 +54,7 @@ fs.openSync = function(filename) {
  * Should return a JSON string for the non-empty file; otherwise, an empty string.
  */
 fs.readFileSync = function(filename) {
-	if (filename == config.writable.nonEmpty.filename) {
+	if (filename === config.writable.nonEmpty.filename) {
 		return JSON.stringify(spec.executedScripts);
 	}
 	
@@ -58,7 +64,7 @@ fs.readFileSync = function(filename) {
 /**
  * Should do nothing.
  */
-fs.writeFileSync = new Function();
+fs.writeFileSync = function() {};
 	
 // Run the shared/generic tests for the file tracker.
 spec.test(FileTracker, "file", config);
