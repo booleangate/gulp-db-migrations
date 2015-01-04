@@ -4,8 +4,6 @@ var gulp = require("gulp"),
 	lint = require("gulp-eslint"),
 	mocha = require("gulp-mocha");
 
-process.env.NODE_PATH = "./source:" + (process.env.NODE_PATH || "");
-
 gulp.task("lint", function() {
 	return gulp.src(["gulpfile.js", "source/**/*.js", "test/**/*.js"])
 		.pipe(lint({
@@ -33,4 +31,10 @@ gulp.task("test", function() {
 		}));
 });
 
-gulp.task("default", ["lint", "test"]);
+/**
+ * The default task runs the lint task then the test task.  This is done serially because otherwise it causes
+ * an "Unexpected end of input" SyntaxError when parsing the linter's rules.
+ */
+gulp.task("default", ["lint"], function() {
+	gulp.start("test");
+});
