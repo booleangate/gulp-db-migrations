@@ -19,24 +19,9 @@ var config = {
 	}
 };
 
-/*
- * Override the behavior of fs in the FileTracker module only.  Sinon doesn't seem to be appropriate for stubbing
- * here because of the way that we have the tests setup.  Ideally we would just do the following, but it's not work
- * as expected.
-
-	fs.writeFileSync = sinon.stub();
-	
-	fs.readFileSync = sinon.stub()
-		.withArgs(config.writable.empty.filename)
-		.returns("")
-		.withArgs(config.writable.nonEmpty.filename)
-		.returns(JSON.stringify(spec.executedScripts));
-	
-		
-	fs.openSync = sinon.stub()
-		.withArgs(config.nonWritable.filename)
-		.throws();
- */
+/* 
+ * Override the behavior of fs in the FileTracker module only.
+ */ 
 /*eslint-disable no-underscore-dangle */
 var fs = FileTracker.__get__("fs");
 /*eslint-enable no-underscore-dangle */
